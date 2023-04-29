@@ -1,0 +1,275 @@
+
+<div class="m-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-warning bg-gradient">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand">
+                <img src="/media/project/logoFl.png" alt="Logo" class="mx-auto d-block" style="vertical-align:bottom;"height="50px" width="80px"/>
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <div class="navbar-nav">
+                    <a href="/" class="nav-item nav-link active text-white"><b>Home</b></a>
+                    <a href="#" class="nav-item nav-link text-white"><b>Browse Jobs</b></a>
+                    <a href="#" class="nav-item nav-link text-white"><b>How it works</b></a>
+                    <div class="nav-item dropdown bg-warning bg-gradient">
+                        <a href="#" class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown"><b>Work</b></a>
+                        <div class="dropdown-menu bg-warning bg-gradient">
+                            <a href="#" class="dropdown-item text-white"><b>Find Jobs</b></a>
+                            <a href="#" class="dropdown-item text-white"><b>Hire Freelancer</b></a>
+                            <a href="#" class="dropdown-item text-white"><b>Get Ideas</b></a>
+                            <a href="#" class="dropdown-item text-white"><b>Recruit Freelancer</b></a>
+                            <a href="#" class="dropdown-item text-white"><b>Post Project</b></a>
+                        </div>
+                    </div>
+                </div>
+                <form class="d-flex">
+                    <div class="input-group" style="margin-left:100px;">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <button type="button" class="btn btn-secondary"><i class="bi-search"></i></button>
+                    </div>
+                </form>
+				{% if islogin %}
+				<div class="nav-item dropdown bg-warning bg-gradient">
+					<a href="#" class="nav-link dropdown-toggle text-white " data-bs-toggle="dropdown"><b>{{ name }}</b></a>
+					<div class="dropdown-menu bg-warning bg-gradient dropdown-menu-end"> <!--dropdown menu end is for left menu-->
+						<a href="/profile" class="dropdown-item text-white"><b>Profile</b></a>
+						<a href="#" class="dropdown-item text-white"><b>Message</b></a>
+						<a href="#" class="dropdown-item text-white"><b>Mail</b></a>
+						<a href="/api" class="dropdown-item text-white"><b>User API</b></a>
+						<a href="/logout" class="dropdown-item text-white"><b>Logout</b></a>
+					</div>
+				</div>
+				{% else %}
+                <div class="navbar-nav hide" id="loginbar" >
+                    <a href="#" class="nav-item nav-link text-white" data-bs-toggle="modal" data-bs-target="#myloginModal"><b>Login</b></a>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        Signup
+                      </button>
+                </div>
+				{% endif %} 
+            </div>
+        </div>
+    </nav>
+</div>
+
+<script>
+    function myFunction() {
+      document.getElementById("demo").innerHTML = "Hello World";
+    }
+    </script>
+
+  <!-- The Signup Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-notify modal-warning" role="document">
+		<!--Content-->
+		<div class="modal-content">
+			<!--Header-->
+			<div class="modal-header text-center bg-warning">
+				<h4 class="modal-title text-white">Sign Up</h4>
+				<button type="button" class="btn-close text-white" data-bs-dismiss="modal"></button>
+			</div>
+			<!-- Modal body -->
+			<form id ="signupform" name="signupform">
+				<div class="modal-body">
+					<div class="md-form mb-2">
+						<label for="signup_name" id="signup_name_label">Name</label>
+						<input type="text" id="signup_name" name="signup_name" minlength="5" maxlength="32" class="form-control" required/> </div>
+					<div class="md-form mb-2">
+						<label for="signup_email" id="signup_email_label">Email-Id</label>
+						<input type="email" id="signup_email" name="signup_email" class="form-control" required/> 
+					</div>
+					<div class="md-form mb-2">
+						<label for="signup_number" id="signup_number_label">Contact No (10 digit)</label>
+						<input id="signup_number" name="signup_number" type="number"  minlength="10"  maxlength="11" class="form-control" required/> </div>
+					<div class="md-form mb-2">
+						<label for="signup_password" id="signup_password_label">Password (minimum length should be 5)</label>
+						<input type="password" id="signup_password" name="signup_password"  minlength="8" class="form-control" required/>
+						<input type="checkbox" onclick="pwdshow()"> Show Password
+						<script>
+						function pwdshow() {
+							
+							var x = document.getElementById("signup_password");
+							if(x.type === "password") {
+								x.type = "text";
+							} else {
+								x.type = "password";
+							}
+						}
+						</script>
+					</div>
+					<div class="md-form mb-2">
+						<label for="freelancer">You are Here for ??</label>
+						<select name = "freelancer" id="freelancer" class="form-select form-select-sm" aria-label=".form-select-sm example">
+							<option value="1" selected>Freelancer</option>
+							<option value="0">Post your Project</option>
+						  </select>
+					</div>
+					<div id="result" class="md-form mb-2">
+					</div>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer justify-content-center">
+					<button type="button" id="submit-btn" class="btn btn-outline-warning waves-effect">Sign Up</button>
+					<!-- data-bs-dismiss="modal" sudhir-->
+				</div>
+		</div>
+		</form>
+		{% block javascript %}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				$('#signupform').validate({
+				});
+				$( "#signup_name" ).rules( "add", {
+					required: true,
+					minlength: 5,
+					messages: {
+					  required: "This Field is required",
+					  minlength: jQuery.validator.format("Name at least {0} characters are necessary")
+					}
+				  });
+
+				  $( "#signup_number" ).rules( "add", {
+					required: true,
+					minlength:10,
+					maxlength:11,
+					messages: {
+					  required: "This Field is required",
+					  minlength: jQuery.validator.format("Phone no should be of 10 digit only.")
+					}
+				  });
+				$('#signupform').valid()
+				$("#submit-btn").click(function() {
+					var signup_name = $("#signup_name").val();
+					var signup_email = $("#signup_email").val();
+					var signup_number = $("#signup_number").val();
+					var signup_password = $("#signup_password").val();
+					var freelancer = $("#freelancer").val()
+					var submitted = false;
+					if ($('#signupform').valid())
+					{
+						$.ajax({
+							type: "POST",
+							url: "/signupdata",
+							data: {
+								signup_name : signup_name, 
+								signup_email : signup_email, 
+								signup_number : signup_number, 
+								signup_password : signup_password, 
+								freelancer : freelancer,
+								},
+							success: function(data) {
+								$("#result").html(data);
+								}
+						});
+					}
+					else
+					{
+						alert("Please Check Form before submit");
+					}
+				});
+			});
+		</script>
+	</div>
+</div>
+<!-- The Signup Modal -->
+
+<!-- The Login Modal -->
+<div class="modal fade" id="myloginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-notify modal-warning" role="document">
+		<!--Content-->
+		<div class="modal-content">
+			<!--Header-->
+			<div class="modal-header text-center bg-warning">
+				<h4 class="modal-title text-white">Login</h4>
+				<button type="button" class="btn-close text-white" data-bs-dismiss="modal"></button>
+			</div>
+			<!-- Modal body -->
+			<form id ="loginform" name="loginform">
+				<div class="modal-body">
+					<div class="md-form mb-2">
+						<label for="login_email" id="login_email_label">Email-Id</label>
+						<input type="email" id="login_email" name="login_email" class="form-control" required/> 
+					</div>
+					<div class="md-form mb-2">
+						<label for="login_password" id="login_password_label">Password (minimum length should be 5)</label>
+						<input type="password" id="login_password" name="login_password"  minlength="8" class="form-control" required/>
+						<input type="checkbox" onclick="login_pwdshow()"> Show Password
+						<script>
+						function login_pwdshow() {
+							var x = document.getElementById("login_password");
+							if(x.type === "password") {
+								x.type = "text";
+							} else {
+								x.type = "password";
+							}
+						}
+						</script>
+					</div>
+					<div id="login_result" class="md-form mb-2">
+					</div>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer justify-content-center">
+					<but2ton type="button" id="submit-btn_login" class="btn btn-outline-warning waves-effect">Login</button>
+					<!-- data-bs-dismiss="modal" sudhir-->
+				</div>
+		</div>
+		</form>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				$('#loginform').validate({});
+				$('#loginform').valid()
+				$("#submit-btn_login").click(function() {
+					var login_email = $("#login_email").val();
+					var login_password = $("#login_password").val();
+					var submitted = false;
+					if ($('#loginform').valid())
+					{
+						$.ajax({
+							type: "POST",
+							url: "/login",
+							data: {
+								login_email : login_email, 
+								login_password : login_password, 
+								},
+							success: function(data) {
+								if (data == "1")
+								{
+									$("#login_result").html("Email or password is Wrong");	
+								}
+								else if (data == "2")
+								{
+									$("#login_result").html("Email Verification Pending.");
+								}
+								else
+								{
+									$('.modal').each(function(){
+										$(this).modal('hide');
+									});
+									location.reload(); // then reload the page.(3)
+								}
+								
+								}
+						});
+					}
+					else
+					{
+						alert("Please Check Form before submit");
+					}
+				});
+			});
+		</script>
+		{% endblock javascript %}
+	</div>
+</div>
+<!-- The Login Modal -->

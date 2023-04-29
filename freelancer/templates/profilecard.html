@@ -1,0 +1,151 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+
+<style>
+    body{
+        background:#eee;
+    }
+    
+    .card{
+        border:none;
+        position:relative;
+        overflow:hidden;
+        border-radius:8px;
+        cursor:pointer;
+    }
+    
+    .card:before{
+        
+        content:"";
+        position:absolute;
+        left:0;
+        top:0;
+        width:4px;
+        height:100%;
+        background-color:#E1BEE7;
+        transform:scaleY(1);
+        transition:all 0.5s;
+        transform-origin: bottom
+    }
+    
+    .card:after{
+        
+        content:"";
+        position:absolute;
+        left:0;
+        top:0;
+        width:4px;
+        height:100%;
+        background-color:#8E24AA;
+        transform:scaleY(0);
+        transition:all 0.5s;
+        transform-origin: bottom
+    }
+    
+    .card:hover::after{
+        transform:scaleY(1);
+    }
+    
+    
+    .fonts{
+        font-size:11px;
+    }
+    
+    .social-list{
+        display:flex;
+        list-style:none;
+        justify-content:center;
+        padding:0;
+    }
+    
+    .social-list li{
+        padding:10px;
+        color:#8E24AA;
+        font-size:19px;
+    }
+    
+    
+    .buttons button:nth-child(1), .da{
+           border:1px solid #8E24AA !important;
+           color:#8E24AA;
+           height:40px;
+    }
+    
+    .da, .buttons button:nth-child(1):hover{
+           border:1px solid #8E24AA !important;
+           color:#fff;
+           height:40px;
+           background-color:#8E24AA;
+    }
+    
+    .da, .buttons .a button:nth-child(2){
+           border:1px solid #8E24AA !important;
+           background-color:#8E24AA;
+           color:#fff;
+            height:40px;
+    }
+</style>
+
+<div class="container mt-5">
+    
+    <div class="row d-flex justify-content-center">
+        
+        <div class="col-md-4">
+            
+            <div class="card p-3 py-4">
+                <div class="row">
+                    <div class="col">
+                        <div class="text">
+                            <span>Mo : {% for x in myauthdata %}{{x.phone}}{% endfor %} </span>
+                        </div>
+                    </div>
+                    <div class="col  text-end">
+                        <span>Address : {% for x in myprofiledata %}{{x.address}}{% endfor %} </span>
+                    </div>
+                </div>
+                
+              
+                <div class="text-center">
+                    {% for x in myprofiledata %}<img src="{{x.photo}}" class="rounded-circle" alt="Profile Photo" width="100" height="100px" /> {% endfor %}
+                </div>
+                
+                <div class="text-center mt-3">
+                    <span class="bg-secondary p-1 px-4 rounded text-white">{% for x in myauthdata %}{% if x.freelancer %} Dev {% else%} Freelancer{%endif%} {% endfor %}</span>
+                    <h5 class="mt-2 mb-0">{{ name }}</h5>
+                    <span>{% for x in myprofiledata %}{{x.devlopertag}}{% endfor %}</span>
+                    
+                    <div class="px-4 mt-1">
+                        <p class="fonts">{% for x in myprofiledata %}{{x.aboutMe}}{% endfor %} </p>
+                    </div>
+                    
+                     <ul class="social-list">
+                        <li><i class="fa">Skills : </i></li>
+                        {% for x in myskilldata%} 
+                        <li><i class="fa">{{x.skill}}</i></li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <div class="buttons">
+                        
+                        <a href = "" class="da btn btn-outline-primary px-4">Message</a>
+                        <a href="/profile" class="da btn btn-primary px-4 ms-3">Edit</a>
+                    </div>
+                    
+                    
+                </div>
+                
+               
+                
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</div>
+{%endblock%}
