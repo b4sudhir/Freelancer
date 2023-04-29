@@ -1,0 +1,2 @@
+# Freelancer
+Django Project
