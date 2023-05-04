@@ -1,47 +1,6 @@
-{% extends "base.html" %}
-{% block content %}
-<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="/media/project/a1.jpg" class="d-block" width="95%" style="margin-left: auto;margin-right: auto;" alt="Image 1">
-        <div class="carousel-caption d-none d-md-block">
-          <h4>Free Lancer</h4>
-          <p>Hire the best freelancers for any job, online.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="/media/project/a2.jpg" class="d-block" width="95%" style="margin-left: auto;margin-right: auto;" alt="Image 2">
-        <div class="carousel-caption d-none d-md-block">
-          <h4>Desginer</h4>
-          <p>Hire the best Designer for any job, online.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="/media/project/a3.jpg" class="d-block" width="95%" style="margin-left: auto;margin-right: auto;" alt="Image 3">
-        <div class="carousel-caption d-none d-md-block">
-          <h4>Android Devloper</h4>
-          <p>Get Android app in best price.</p>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-  
+{% extends "base.html" %} {% block content %} {% load static %}
 
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
@@ -130,7 +89,7 @@
            color:#fff;
             height:40px;
     }
-    .leftLst, .rightLst { position:absolute; border-radius:30%; margin-top:180px; }
+    .leftLst, .rightLst { position:absolute; border-radius:30%;top:calc(50% - 20px); }
      .leftLst { left:10px; }
      .rightLst { right:10px; }
         .leftLst.over,.rightLst.over { pointer-events: none; background:#ccc; }    
@@ -182,19 +141,15 @@
 
             {% if myauthdata.has_other_pages %}
                 {% if myauthdata.has_previous %}
-                <a href="?page={{ myauthdata.previous_page_number }}" class="btn btn-outline-primary leftLst">&laquo;</a>
+                    <a href="?page={{ myauthdata.previous_page_number }}" class="btn btn-outline-primary leftLst">&laquo;</a>
                 {% endif %}
                 {% if myauthdata.has_next %}
-                <a href="?page={{ myauthdata.next_page_number }}" class="btn btn-outline-primary rightLst">&raquo;</a>
+                    <a href="?page={{ myauthdata.next_page_number }}" class="btn btn-outline-primary rightLst">&raquo;</a>
                 {% endif %}
-             {% comment %} <button class="btn btn-primary leftLst"><</button>
-             <button class="btn btn-primary rightLst">></button> {% endcomment %}
             {% endif %}
         {% else %}
              <p>No Developer found.</p>     
         {% endif %}        
         </div>
     </div>
-
-
 {%endblock%}

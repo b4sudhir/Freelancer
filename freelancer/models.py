@@ -22,7 +22,7 @@ class profile(models.Model):
     address = models.CharField(max_length=255)
     photo = models.ImageField(upload_to="profile_pic")
     devlopertag = models.CharField(null=True,max_length=255)
-    experiance = models.CharField(null=True, max_length=255)
+    experience = models.CharField(null=True, max_length=255)
     aboutMe = models.TextField()
 
 class skills(models.Model):
@@ -30,4 +30,28 @@ class skills(models.Model):
           auth, 
           on_delete=models.CASCADE)
     skill = models.CharField(max_length=255)
+
+class profileproj(models.Model):
+    authTable = models.ForeignKey(auth,on_delete=models.CASCADE)
+    projName = models.CharField(max_length=64)
+    projDisc = models.TextField()
+    projTime = models.CharField(max_length=64)
+    projLang = models.CharField(max_length=64)
+
+class Message(models.Model):
+    authTable = models.ForeignKey(auth,on_delete=models.CASCADE)
+    msgid = models.UUIDField()
+    msgsub = models.CharField(max_length=255)
+    msgbody = models.TextField()
+    msgtime = models.DateTimeField()
+    msgread = models.BooleanField()
+    msgrecipent = models.EmailField(null = True)
+    
+
+class Project(models.Model):
+    authTable = models.ForeignKey(auth,on_delete=models.CASCADE)
+    projectName = models.CharField(max_length=64)
+    projectDisc = models.TextField()
+    projectTime = models.CharField(max_length=64)
+    projectLang = models.CharField(max_length=64)
 

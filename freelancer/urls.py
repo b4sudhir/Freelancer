@@ -16,6 +16,8 @@ urlpatterns = [
     path("api/", views.UserList.as_view(), name="userList"),
     path("api/<int:id>", views.UserList.as_view(), name="userList"),
     path("profilecard", views.profilecard, name="profilecard"),
+    path("devdisplay/", views.devdisplay, name="devdisp"),
+    path("addproject/", views.addproj, name="addproj"),
     
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

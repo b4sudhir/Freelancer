@@ -1,5 +1,7 @@
+#Chain your query
+from itertools import chain
 #For Paginator 
-from django.core.paginator import Paginator #import Paginator
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger #import Paginator
 # for search query
 from django.db.models import Q
 
@@ -15,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from datetime import datetime
-from .models import auth,profile,skills
+from .models import auth,profile,skills,profileproj,Project
 from django.shortcuts import render,redirect
 from django.core.files.storage import FileSystemStorage
 
@@ -42,18 +44,34 @@ context = ssl.create_default_context()
 
 
 def home(request):
-    template = loader.get_template('homepage.html')
-    if 'login_name' in request.session:
+        myauth = auth.objects.all()
+        myprofile = profile.objects.all().values()
+        myskill = skills.objects.all().values()
+        page = request.GET.get('page', 1)
+        paginator_dev = Paginator(myauth, 3)
+        try:
+            authpage = paginator_dev.page(page)
+        except PageNotAnInteger:
+            authpage = paginator_dev.page(1)
+        except EmptyPage:
+            authpage = paginator_dev.page(paginator_dev.num_pages)
+        
+        logindetail = False
+        loginemail = ""
+        loginname = ""
+        if 'login_email' in request.session:
+            logindetail =True
+            loginname = request.session['login_name']
+            loginemail = request.session['login_email']
         context = {
-                'islogin': True,
-                'name' : request.session['login_name'],
-                'email' : request.session['login_email']
-                }
-    else:
-       context = {
-                    'islogin': False
-                 }     
-    return render(request,'homepage.html',context)
+                    'islogin': logindetail,
+                    'name' : loginname,
+                    'email' :loginemail,
+                    'myauthdata':authpage,
+                    'myprofiledata':myprofile,
+                    'myskilldata':myskill
+                    }
+        return render(request,'homepage.html',context)
 
 @csrf_exempt
 def signupdata(request):
@@ -124,6 +142,7 @@ def login(request):
     lq = request.POST
     # print(lq)
     loggedinemail = lq['login_email']
+
     if auth.objects.filter(email=lq['login_email'],password=lq['login_password']).exists():
         loginquery = auth.objects.filter(email=lq['login_email']).values()
         if(loginquery[0].get('verified')):
@@ -131,7 +150,7 @@ def login(request):
             request.session['login_email'] = loggedinemail
             print(l_detail)
             login_name = l_detail[0].get('name')
-            request.session['login_name']=login_name
+            request.session['login_name']=login_name            
             context = {
                     'islogin': True,
                     'name' : request.session['login_name'],
@@ -159,37 +178,43 @@ def tokenverify(request,token):
     
 def logout(request):
     if "login_name" in request.session :
+        auth.objects.filter(email=request.session["login_email"]).update(lastseen = datetime.now())
         del request.session["login_email"]
         del request.session["login_name"]
         request.session.modified = True
-    
+        
     context = {
                 'islogin': False
                 }
     return redirect("https://scloud.tk")
 
 def profiledisplay(request):
-    myauth = auth.objects.filter(email = request.session['login_email']).values()
-    myprofile = profile.objects.filter(authTable_id = myauth[0].get('id')).values()
-    myskill = skills.objects.filter(authTable_id = myauth[0].get('id')).values()
-    message = ""
-    messageon = False
-    if 'messagetext' in request.session:
-        message = request.session['messagetext']
-        print("message: ",message)
-        del request.session['messagetext']
-        messageon = True
+    try:
+        myauth = auth.objects.filter(email = request.session['login_email']).values()
+        myprofile = profile.objects.filter(authTable_id = myauth[0].get('id')).values()
+        myskill = skills.objects.filter(authTable_id = myauth[0].get('id')).values()
+        message = ""
+        messageon = False
+        if 'messagetext' in request.session:
+            message = request.session['messagetext']
+            print("message: ",message)
+            del request.session['messagetext']
+            messageon = True
 
-    context = {
-                'islogin': True,
-                'name' : request.session['login_name'],
-                'email' : request.session['login_email'],
-                'myauthdata':myauth,
-                'myprofiledata' : myprofile,
-                'myskilldata':myskill,
-                'messagetext':message,
-                'message':messageon,
-                }
+        context = {
+                    'islogin': True,
+                    'name' : request.session['login_name'],
+                    'email' : request.session['login_email'],
+                    'myauthdata':myauth,
+                    'myprofiledata' : myprofile,
+                    'myskilldata':myskill,
+                    'messagetext':message,
+                    'message':messageon,
+                    }
+    except Exception as e:
+        return HttpResponse("Error:" + str(e))
+        
+                
     return render(request,'profile.html',context)
 
 def imgupload(request):
@@ -285,6 +310,12 @@ def profiledata(request):
                         else :
                             message = "Error in devlopertag"
                         
+                        if(len(request.GET.get('experience'))>0):
+                            print("t")
+                            profile.objects.filter(authTable_id = myauth[0].get('id')).update(experience=request.GET.get('experience'))
+                        else :
+                            message = "Error in experience"
+                        
                         if(len(squery['aboutme'])>0):
                             profile.objects.filter(authTable_id = myauth[0].get('id')).update(aboutMe=squery['aboutme'])
                         else :
@@ -354,3 +385,74 @@ def profilecard(request):
                 'myskilldata':myskill,
                 }
     return render(request, "profilecard.html",context)
+
+# class SessionExpiredMiddleware:
+#     def process_request(request):
+#         last_activity = request.session['last_activity']
+#         now = datetime.now()
+
+#         if (now - last_activity).minutes > 10:
+#             # Do logout / expire session
+#             # and then...
+#             return HttpResponseRedirect("LOGIN_PAGE_URL")
+
+#         if not request.is_ajax():
+#             # don't set this for ajax requests or else your
+#             # expired session checks will keep the session from
+#             # expiring :)
+#             request.session['last_activity'] = now
+
+def devdisplay(request):
+        myauth = auth.objects.all().values()
+        myprofile = profile.objects.all().values()
+        myskill = skills.objects.all().values()
+        if request.POST :
+            page = request.POST.get('page', 1)
+        else :
+            page = request.GET.get('page',1)
+        print("page:",page)
+        paginator_dev = Paginator(myauth, 3)
+        try:
+            authpage = paginator_dev.page(page)
+        except PageNotAnInteger:
+            authpage = paginator_dev.page(1)
+        except EmptyPage:
+            authpage = paginator_dev.page(paginator_dev.num_pages)
+        
+        logindetail = False
+        loginemail = ""
+        loginname = ""
+        if 'login_email' in request.session:
+            logindetail =True
+            loginname = request.session['login_name']
+            loginemail = request.session['login_email']
+        context = {
+                    'islogin': logindetail,
+                    'name' : loginname,
+                    'email' :loginemail,
+                    'myauthdata':authpage,
+                    'myprofiledata':myprofile,
+                    'myskilldata':myskill
+                    }
+        return render(request,"dev.html",context)
+
+def addproj(request):
+    message = ""
+    if request.GET :
+        projName = request.GET.get('projname')
+        projDisc = request.GET.get('projdisc')
+        projTime = request.GET.get('projtime')
+        projLang = request.GET.get('projlang')
+        if 'login_email' in request.session:
+            myauth = auth.objects.filter(email = request.session['login_email']).values()
+            myprofproj = profileproj(
+                authTable = myauth[0].get('id'),
+                projName = projName,
+                projDisc = projDisc,
+                projTime = projTime,
+                projLang = projLang
+            )
+            myprofproj.save()
+            
+    request.session['messagetext'] = message
+    return redirect("/profile")

@@ -15,6 +15,58 @@
   </script>
 {% endif %}
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+  html, body {
+      background-color: #fff;
+      color: #636b6f;
+      font-family: 'Raleway';
+      font-weight: 100;
+      height: 100vh;
+      margin: 0;
+  }
+
+  .full-height {
+      height: 100vh;
+  }
+
+  .flex-center {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+  }
+
+  .position-ref {
+      position: relative;
+  }
+
+  .top-right {
+      position: absolute;
+      right: 10px;
+      top: 18px;
+  }
+
+  .content {
+      text-align: center;
+  }
+
+  .title {
+      font-size: 84px;
+  }
+
+  .links > a {
+      color: #636b6f;
+      padding: 0 25px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1rem;
+      text-decoration: none;
+      text-transform: uppercase;
+  }
+
+  .m-b-md {
+      margin-bottom: 30px;
+  }
+</style>
 <div class="container">
   <div class="row flex-lg-nowrap">
     <div class="col">
@@ -98,10 +150,19 @@
                             <div class="col">
                               <div class="form-group mt-2">
                                 <label>Profile Type (Ex: Java Developer, DataScience Engineer)</label>
-                                <input class="form-control" name="devlopertag" type="text" placeholder="Profile Type" value="{% for x in myprofiledata %}{{x.devlopertag}}{% endfor %}"">
+                                <input class="form-control" name="devlopertag" type="text" placeholder="Profile Type" value="{% for x in myprofiledata %}{{x.devlopertag}}{% endfor %}">
                               </div>
                             </div>
                           </div>
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group mt-2">
+                                <label>Job Experiance (Ex: 2 years 1.5 yrs)</label>
+                                <input class="form-control" name="experience" type="text" placeholder="Experiance" value="{% for x in myprofiledata %}{{x.experience}}{% endfor %}">
+                              </div>
+                            </div>
+                          </div>
+                          
                           <div class="row">
                             <div class="col">
                               <div class="form-group mt-2">
@@ -133,6 +194,41 @@
                               </div>
                             </div>
                           </div>
+
+
+                          
+
+                          <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#ModalForm">
+                          Add Project
+                          </button> 
+                        <div class="modal fade" id="ModalForm" tabindex="-1" aria-labelledby="ModalFormLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="myform bg-dark">
+                                        <h1 class="text-center">Login Form</h1>
+                                        <form>
+                                            <div class="mb-3 mt-4">
+                                                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword1">
+                                            </div>
+                                            <button type="submit" class="btn btn-light mt-3">LOGIN</button>
+                                            <p>Not a member? <a href="#">Signup now</a></p>
+                                        </form>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+
+
+
+
                           <div class="row mt-5">
                             <div class="col mb-3">
                               <div class="form-group">
